@@ -2,7 +2,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const socket = require('socket.io')
 const cors = require('cors')
-const {Message} = require('./models')
+const {Message, Users, Chat} = require('./models')
 const app = express()
 const port = process.env.PORT || 7000
 
@@ -21,11 +21,9 @@ io.on("connection", function(socket){
   console.log("Socket Connection Established with ID :"+ socket.id)
 
   socket.on("chat", async function(chat){
-    console.log(chat, "disini")
-    // let response = await new message(chat).save()
-    Message.create({
-      handle: "sample",
-      message: chat
+    Chat.create({
+      message: chat.message,
+      user_id: chat.user_id
     })
     .then(resp => {
       //console.log(resp)
@@ -37,10 +35,9 @@ io.on("connection", function(socket){
   })
 })
 
-
-app.get('/chat', async (req,res) => {
-  //let result = await message.find()
-  Message.findAll()
+app.post('/add-user', (req, res) => {
+  const {name} = req.body
+  Users.create({name})
     .then(resp => {
       res.status(200).json({
         data: resp,
@@ -48,6 +45,30 @@ app.get('/chat', async (req,res) => {
       })
     })
     .catch(error => {
+      res.status(402).json({
+        data: error,
+        message: "error"
+      })
+    })
+})
+
+app.get('/chat', async (req,res) => {
+  //let result = await message.find()
+  Chat.findAll({
+      attributes: ['id', 'message', 'user_id', 'createdAt'],
+      include: [{
+        model: Users,
+        attributes: ['name']
+      }]
+    })
+    .then(resp => {
+      res.status(200).json({
+        data: resp,
+        message: "Success"
+      })
+    })
+    .catch(error => {
+      console.log(error)
       res.status(402).json({
         data: error,
         message: "error"
