@@ -58,7 +58,7 @@ app.get('/chat', async (req,res) => {
       attributes: ['id', 'message', 'user_id', 'createdAt'],
       include: [{
         model: Users,
-        attributes: ['name']
+        attributes: ['id','name']
       }]
     })
     .then(resp => {
