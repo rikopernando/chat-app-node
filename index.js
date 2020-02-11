@@ -20,13 +20,12 @@ let io =  socket(server);
 io.on("connection", function(socket){
   console.log("Socket Connection Established with ID :"+ socket.id)
 
-  socket.on("chat", async function(chat){
+  socket.on("chat", (chat) => {
     Chat.create({
       message: chat.message,
       user_id: chat.user_id
     })
     .then(resp => {
-      //console.log(resp)
       io.sockets.emit("chat", resp)
     })
     .catch((err) => {
@@ -52,8 +51,7 @@ app.post('/add-user', (req, res) => {
     })
 })
 
-app.get('/chat', async (req,res) => {
-  //let result = await message.find()
+app.get('/chat', (req,res) => {
   Chat.findAll({
       attributes: ['id', 'message', 'user_id', 'createdAt'],
       include: [{
@@ -68,7 +66,6 @@ app.get('/chat', async (req,res) => {
       })
     })
     .catch(error => {
-      console.log(error)
       res.status(402).json({
         data: error,
         message: "error"
