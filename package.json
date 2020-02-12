@@ -5,7 +5,8 @@
   "author": "rikopernando",
   "license": "MIT",
   "scripts": {
-    "dev": "nodemon index.js"
+    "dev": "nodemon index.js",
+    "start": "node index.js"
   },
   "dependencies": {
     "body-parser": "^1.19.0",
@@ -19,5 +20,8 @@
   },
   "devDependencies": {
     "nodemon": "^2.0.2"
+  },
+  "engines": {
+    "node": "11.10.1"
   }
 }
