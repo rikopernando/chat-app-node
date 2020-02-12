@@ -17,16 +17,16 @@ const server = app.listen(port, () => {
 // Setting up Socket.io
 let io =  socket(server);
 
-io.on("connection", function(socket){
+io.on("connection", (socket) => {
   console.log("Socket Connection Established with ID :"+ socket.id)
 
-  socket.on("chat", (chat) => {
+  socket.on("new message", (chat) => {
     Chat.create({
       message: chat.message,
       user_id: chat.user_id
     })
     .then(resp => {
-      io.sockets.emit("chat", resp)
+      io.sockets.emit("new message", resp)
     })
     .catch((err) => {
       console.log(err)
