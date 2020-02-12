@@ -72,3 +72,9 @@ app.get('/chat', (req,res) => {
       })
     })
 })
+
+app.get('/', (req,res) => {
+  res.status(200).json({
+    message: "Welcome to chat apps by riko"
+  })
+})
