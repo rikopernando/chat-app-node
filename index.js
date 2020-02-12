@@ -73,6 +73,22 @@ app.get('/chat', (req,res) => {
     })
 })
 
+app.get('/clear-chat', (req,res) => {
+  Chat
+    .destroy({truncate: true})
+    .then(resp => {
+      res.status(200).json({
+        message: "Success Clear Chat"
+      })
+    })
+    .catch(error => {
+      res.status(402).json({
+        data: error,
+        message: "error"
+      })
+    })
+})
+
 app.get('/', (req,res) => {
   res.status(200).json({
     message: "Welcome to chat apps by riko"
